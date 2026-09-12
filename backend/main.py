@@ -3,13 +3,14 @@ from datetime import datetime
 import hashlib
 import secrets
 
+
 from fastapi import FastAPI, Depends, HTTPException, Header
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from fastapi.middleware.cors import CORSMiddleware
 
-from database import get_db
+from database import get_db, engine, Base
 
 from admin_auth import (
     admin_login,
@@ -27,7 +28,7 @@ from models import (
     OptionStatistics,
 )
 
-
+Base.metadata.create_all(bind=engine)
 # =========================
 # FastAPI
 # =========================
