@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>平均値</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     ログイン画面
+================================================== -->
+
+<section
+    id="loginSection"
+    class="auth-section"
+>
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            平均値
+        </div>
+
+        <h1>
+            おかえりなさい
+        </h1>
+
+        <p class="auth-description">
+            ユーザー名とパスワードを入力してください。
+        </p>
+
+
+        <div class="auth-form">
+
+            <label for="loginUsernameInput">
+                ユーザー名
+            </label>
+
+            <input
+                type="text"
+                id="loginUsernameInput"
+                placeholder="ユーザー名"
+                maxlength="100"
+                autocomplete="username"
+            >
+
+
+            <label for="loginPasswordInput">
+                パスワード
+            </label>
+
+            <input
+                type="password"
+                id="loginPasswordInput"
+                placeholder="パスワード"
+                maxlength="200"
+                autocomplete="current-password"
+            >
+
+
+            <button
+                id="loginButton"
+                type="button"
+            >
+                ログイン
+            </button>
+
+
+            <p
+                id="loginError"
+                class="auth-error"
+            ></p>
+
+
+            <button
+                id="showRegisterButton"
+                class="auth-link-button"
+                type="button"
+            >
+                新規登録はこちら
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     新規登録画面
+================================================== -->
+
+<section
+    id="registrationSection"
+    class="auth-section"
+    style="display: none;"
+>
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            平均値
+        </div>
+
+        <h1>
+            アカウントを作成
+        </h1>
+
+        <p class="auth-description">
+            ユーザー名とパスワードを登録してください。
+        </p>
+
+
+        <div class="auth-form">
+
+            <label for="registerUsernameInput">
+                ユーザー名
+            </label>
+
+            <input
+                type="text"
+                id="registerUsernameInput"
+                placeholder="3文字以上"
+                maxlength="100"
+                autocomplete="username"
+            >
+
+
+            <label for="registerPasswordInput">
+                パスワード
+            </label>
+
+            <input
+                type="password"
+                id="registerPasswordInput"
+                placeholder="8文字以上"
+                maxlength="200"
+                autocomplete="new-password"
+            >
+
+
+            <label for="registerPasswordConfirmInput">
+                パスワード（確認）
+            </label>
+
+            <input
+                type="password"
+                id="registerPasswordConfirmInput"
+                placeholder="もう一度入力"
+                maxlength="200"
+                autocomplete="new-password"
+            >
+
+
+            <button
+                id="registerButton"
+                type="button"
+            >
+                アカウントを作成
+            </button>
+
+
+            <p
+                id="registrationError"
+                class="auth-error"
+            ></p>
+
+
+            <button
+                id="showLoginButton"
+                class="auth-link-button"
+                type="button"
+            >
+                ログインに戻る
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     アプリ本体
+================================================== -->
+
+<div
+    id="appContainer"
+    style="display: none;"
+>
+
+
+    <!-- ==================================================
+         ヘッダー
+    ================================================== -->
+
+    <header id="appHeader">
+
+        <div class="logo">
+            平均値
+        </div>
+
+
+        <nav class="nav">
+
+            <button
+                class="nav-button type-nav-button active"
+                id="extraNav"
+                type="button"
+            >
+                EXTRA
+            </button>
+
+
+            <button
+                class="nav-button type-nav-button"
+                id="ordinaryNav"
+                type="button"
+            >
+                ORDINARY
+            </button>
+
+
+            <button
+                class="nav-button type-nav-button"
+                id="resultNav"
+                type="button"
+            >
+                RESULT
+            </button>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ==================================================
+         回答状態フィルター
+    ================================================== -->
+
+    <div class="filter-nav">
+
+        <button
+            class="nav-button filter-nav-button active"
+            id="allNav"
+            type="button"
+        >
+            すべて
+        </button>
+
+
+        <button
+            class="nav-button filter-nav-button"
+            id="unansweredNav"
+            type="button"
+        >
+            未回答
+        </button>
+
+
+        <button
+            class="nav-button filter-nav-button"
+            id="answeredNav"
+            type="button"
+        >
+            回答済み
+        </button>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         メイン
+    ================================================== -->
+
+    <main
+        id="appMain"
+        class="main"
+    >
+
+
+        <!-- ==================================================
+             問題一覧
+        ================================================== -->
+
+        <section class="category-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-label">
+                        QUESTION
+                    </p>
+
+
+                    <h2 id="categoryTitle">
+                        すべての問題
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="category-list"
+                id="categoryList"
+            >
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             問題
+        ================================================== -->
+
+        <section
+            class="question-section"
+            id="questionSection"
+        >
+
+            <div class="question-card">
+
+
+                <div class="question-header">
+
+                    <div
+                        class="question-tags"
+                        id="questionTags"
+                    >
+
+                        <span class="question-tag">
+                            倫理
+                        </span>
+
+                    </div>
+
+
+                    <span
+                        class="question-number"
+                        id="questionNumber"
+                    >
+                        QUESTION 01
+                    </span>
+
+                </div>
+
+
+
+                <h1 id="questionTitle">
+                    読み込み中...
+                </h1>
+
+
+
+                <p
+                    class="question-text"
+                    id="questionText"
+                >
+                    問題を読み込んでいます。
+                </p>
+
+
+
+                <div
+                    class="options"
+                    id="options"
+                >
+                </div>
+
+
+
+                <button
+                    class="answer-button"
+                    id="answerButton"
+                    type="button"
+                    disabled
+                >
+                    回答する
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             1問ごとの結果
+        ================================================== -->
+
+        <section
+            class="result-section hidden"
+            id="resultSection"
+        >
+
+            <div class="result-card">
+
+
+                <!-- あなたの回答 -->
+
+                <div class="your-answer-block">
+
+                    <p class="result-label">
+                        あなたの回答
+                    </p>
+
+
+                    <div class="your-answer">
+
+                        <span
+                            class="your-answer-key"
+                            id="yourAnswerKey"
+                        >
+                            A
+                        </span>
+
+
+                        <span
+                            class="your-answer-text"
+                            id="yourAnswerText"
+                        >
+                            -
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- 同じ回答を選んだ割合 -->
+
+                <div class="same-answer-block">
+
+                    <p class="result-label">
+                        あなたと同じ答えを選んだ人
+                    </p>
+
+
+                    <div
+                        class="result-percentage"
+                        id="resultPercentage"
+                    >
+                        0%
+                    </div>
+
+
+                    <p
+                        class="result-description"
+                        id="resultDescription"
+                    >
+                        -
+                    </p>
+
+                </div>
+
+
+
+                <!-- 回答割合 -->
+
+                <div class="distribution-block">
+
+                    <div class="result-section-title">
+                        全体の回答割合
+                    </div>
+
+
+                    <div
+                        class="result-options"
+                        id="resultOptions"
+                    >
+                    </div>
+
+                </div>
+
+
+
+                <!-- 結果情報 -->
+
+                <div class="result-info">
+
+                    <div class="result-info-item">
+
+                        <span class="result-info-label">
+                            回答者数
+                        </span>
+
+
+                        <span
+                            class="result-info-value"
+                            id="totalAnswers"
+                        >
+                            0人
+                        </span>
+
+                    </div>
+
+
+
+                    <div class="result-info-item">
+
+                        <span class="result-info-label">
+                            多数派
+                        </span>
+
+
+                        <span
+                            class="result-info-value"
+                            id="majorityAnswer"
+                        >
+                            -
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <button
+                    class="next-button"
+                    id="nextButton"
+                    type="button"
+                >
+                    次の問題
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             総合 RESULT
+        ================================================== -->
+
+        <section
+            class="overall-result-section hidden"
+            id="overallResultSection"
+        >
+
+            <div class="overall-result-card">
+
+
+                <!-- ==========================================
+                     タイトル
+                ========================================== -->
+
+                <div class="overall-result-heading">
+
+                    <p class="section-label">
+                        RESULT
+                    </p>
+
+
+                    <h1>
+                        あなたの総合評価
+                    </h1>
+
+
+                    <p>
+                        これまでの回答から、
+                        あなたがどんなタイプなのかを評価します。
+                    </p>
+
+                </div>
+
+
+
+                <!-- ==========================================
+                     総合評価
+                ========================================== -->
+
+                <div class="overall-evaluation">
+
+                    <p class="overall-evaluation-label">
+                        総合評価
+                    </p>
+
+
+                    <h2
+                        id="overallEvaluationTitle"
+                        class="overall-evaluation-title"
+                    >
+                        まだ回答がありません
+                    </h2>
+
+
+                    <p
+                        id="overallEvaluationDescription"
+                        class="overall-evaluation-description"
+                    >
+                        問題に回答すると、
+                        あなたの総合評価が表示されます。
+                    </p>
+
+                </div>
+
+
+
+                <!-- ==========================================
+                     多数派・少数派
+                ========================================== -->
+
+                <div class="evaluation-block majority-evaluation-block">
+
+                    <div class="evaluation-block-header">
+
+                        <div>
+
+                            <p class="evaluation-label">
+                                多数派・少数派度合い
+                            </p>
+
+
+                            <h3
+                                id="majorityDegree"
+                                class="evaluation-degree"
+                            >
+                                --
+                            </h3>
+
+                        </div>
+
+
+                        <div
+                            id="majorityRate"
+                            class="evaluation-percentage"
+                        >
+                            --%
+                        </div>
+
+                    </div>
+
+
+
+                    <p
+                        id="majorityDescription"
+                        class="evaluation-description"
+                    >
+                        --
+                    </p>
+
+
+
+                    <div class="majority-stats">
+
+                        <div class="majority-stat">
+
+                            <span>
+                                回答数
+                            </span>
+
+
+                            <strong id="majorityAnsweredQuestions">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="majority-stat">
+
+                            <span>
+                                多数派
+                            </span>
+
+
+                            <strong id="majorityCount">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="majority-stat">
+
+                            <span>
+                                少数派
+                            </span>
+
+
+                            <strong id="minorityCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==========================================
+                     平均度合い
+                ========================================== -->
+
+                <div class="evaluation-block average-evaluation-block">
+
+                    <div class="evaluation-block-header">
+
+                        <div>
+
+                            <p class="evaluation-label">
+                                平均度合い
+                            </p>
+
+
+                            <h3
+                                id="averageDegree"
+                                class="evaluation-degree"
+                            >
+                                --
+                            </h3>
+
+                        </div>
+
+
+                        <div
+                            id="averageScore"
+                            class="evaluation-percentage"
+                        >
+                            --%
+                        </div>
+
+                    </div>
+
+
+
+                    <p
+                        id="averageDescription"
+                        class="evaluation-description"
+                    >
+                        --
+                    </p>
+
+
+
+                    <div class="average-stats">
+
+                        <div class="average-stat">
+
+                            <span>
+                                数値・時間問題
+                            </span>
+
+
+                            <strong id="numericAnsweredQuestions">
+                                0問
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==========================================
+                     総回答数
+                ========================================== -->
+
+                <div class="overall-total">
+
+                    <span>
+                        回答した問題
+                    </span>
+
+
+                    <strong id="overallAnsweredQuestions">
+                        0問
+                    </strong>
+
+                </div>
+
+
+
+                <!-- ==========================================
+                     問題へ戻る
+                ========================================== -->
+
+                <button
+                    class="next-button overall-back-button"
+                    id="overallBackButton"
+                    type="button"
+                >
+                    問題に戻る
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             下部の平均値表示
+        ================================================== -->
+
+        <section class="user-average-section">
+
+            <div class="average-card">
+
+
+                <div>
+
+                    <p class="average-label">
+                        あなたの平均値
+                    </p>
+
+
+                    <h2 id="userAverage">
+                        --%
+                    </h2>
+
+                </div>
+
+
+
+                <div>
+
+                    <p class="average-level">
+
+                        <span id="userLevel">
+                            まだ回答がありません
+                        </span>
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==================================================
+         フッター
+    ================================================== -->
+
+    <footer
+        id="appFooter"
+        class="appfooter"
+    >
+
+        <p>
+        </p>
+
+
+        <p>
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- ==================================================
+     JavaScript
+================================================== -->
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>

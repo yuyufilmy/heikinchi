@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>平均値 | 管理画面</title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+</head>
+
+<body>
+
+    <!-- =========================
+         ログイン画面
+    ========================== -->
+    <section
+        id="loginSection"
+        class="login-section"
+    >
+
+        <div class="login-card">
+
+            <div class="login-logo">
+                平均値
+            </div>
+
+            <div class="login-subtitle">
+                ADMINISTRATOR
+            </div>
+
+            <h1>
+                管理者ログイン
+            </h1>
+
+            <p class="login-description">
+                管理画面を利用するには<br>
+                管理者アカウントでログインしてください。
+            </p>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label for="adminUsername">
+                        管理者ID
+                    </label>
+
+                    <input
+                        id="adminUsername"
+                        type="text"
+                        autocomplete="username"
+                        placeholder="管理者ID"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="adminPassword">
+                        パスワード
+                    </label>
+
+                    <input
+                        id="adminPassword"
+                        type="password"
+                        autocomplete="current-password"
+                        placeholder="パスワード"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    id="loginButton"
+                    type="submit"
+                    class="primary-button"
+                >
+                    ログイン
+                </button>
+
+                <p
+                    id="loginError"
+                    class="error-message"
+                ></p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         管理画面
+    ========================== -->
+    <section
+        id="adminSection"
+        class="admin-section hidden"
+    >
+
+        <!-- ヘッダー -->
+        <header class="admin-header">
+
+            <div class="admin-header-left">
+
+                <div class="admin-brand">
+                    平均値
+                </div>
+
+                <span class="admin-badge">
+                    ADMIN
+                </span>
+
+            </div>
+
+            <div class="admin-header-right">
+
+                <button
+                    id="refreshButton"
+                    class="header-button"
+                    type="button"
+                >
+                    更新
+                </button>
+
+                <button
+                    id="logoutButton"
+                    class="header-button logout-button"
+                    type="button"
+                >
+                    ログアウト
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- メイン -->
+        <main class="admin-main">
+
+            <!-- ページタイトル -->
+            <div class="page-title-area">
+
+                <div>
+
+                    <div class="page-eyebrow">
+                        QUESTION MANAGEMENT
+                    </div>
+
+                    <h1>
+                        問題管理
+                    </h1>
+
+                    <p>
+                        問題の追加・編集・公開状態を管理できます。
+                    </p>
+
+                </div>
+
+                <button
+                    id="newQuestionButton"
+                    class="primary-button new-question-button"
+                    type="button"
+                >
+                    ＋ 新しい問題
+                </button>
+
+            </div>
+
+
+            <!-- 統計 -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        TOTAL
+                    </span>
+
+                    <strong
+                        id="totalQuestionCount"
+                        class="stat-value"
+                    >
+                        0
+                    </strong>
+
+                    <span class="stat-description">
+                        全問題
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        PUBLISHED
+                    </span>
+
+                    <strong
+                        id="publishedQuestionCount"
+                        class="stat-value"
+                    >
+                        0
+                    </strong>
+
+                    <span class="stat-description">
+                        公開中
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        DRAFT
+                    </span>
+
+                    <strong
+                        id="draftQuestionCount"
+                        class="stat-value"
+                    >
+                        0
+                    </strong>
+
+                    <span class="stat-description">
+                        非公開
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- フィルター -->
+            <div class="toolbar">
+
+                <div class="toolbar-left">
+
+                    <button
+                        class="filter-button active"
+                        data-filter="all"
+                        type="button"
+                    >
+                        すべて
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-filter="published"
+                        type="button"
+                    >
+                        公開中
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-filter="draft"
+                        type="button"
+                    >
+                        非公開
+                    </button>
+
+                </div>
+
+                <div class="toolbar-right">
+
+                    <input
+                        id="questionSearch"
+                        class="search-input"
+                        type="search"
+                        placeholder="問題を検索..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- 問題一覧 -->
+            <section class="question-management-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-eyebrow">
+                            QUESTIONS
+                        </span>
+
+                        <h2>
+                            問題一覧
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="displayQuestionCount"
+                        class="display-count"
+                    >
+                        0件
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="questionList"
+                    class="question-list"
+                >
+
+                    <!-- JavaScriptで生成 -->
+
+                </div>
+
+
+                <div
+                    id="questionListEmpty"
+                    class="empty-state hidden"
+                >
+
+                    <div class="empty-icon">
+                        —
+                    </div>
+
+                    <h3>
+                        問題がありません
+                    </h3>
+
+                    <p>
+                        条件に一致する問題がありません。
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </section>
+
+
+    <!-- =========================
+         問題編集モーダル
+    ========================== -->
+    <div
+        id="questionModal"
+        class="modal-overlay hidden"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span
+                        id="modalEyebrow"
+                        class="modal-eyebrow"
+                    >
+                        NEW QUESTION
+                    </span>
+
+                    <h2
+                        id="modalTitle"
+                    >
+                        新しい問題
+                    </h2>
+
+                </div>
+
+                <button
+                    id="closeModalButton"
+                    class="modal-close-button"
+                    type="button"
+                    aria-label="閉じる"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="questionForm">
+
+                <input
+                    id="editingQuestionId"
+                    type="hidden"
+                >
+
+
+                <!-- =========================
+                     基本情報
+                ========================== -->
+                <div class="form-section">
+
+                    <div class="form-section-title">
+                        基本情報
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="questionCategory">
+                                カテゴリ
+                            </label>
+
+                            <select
+                                id="questionCategory"
+                                required
+                            >
+                                <option value="">
+                                    読み込み中...
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="questionSortOrder">
+                                並び順
+                            </label>
+
+                            <input
+                                id="questionSortOrder"
+                                type="number"
+                                value="0"
+                                min="0"
+                                step="1"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- 質問タイプ -->
+                    <div class="form-group">
+
+                        <label for="questionType">
+                            質問タイプ
+                        </label>
+
+                        <select
+                            id="questionType"
+                            required
+                        >
+
+                            <option value="ORDINARY">
+                                ORDINARY（通常）
+                            </option>
+
+                            <option value="EXTRA">
+                                EXTRA（特別）
+                            </option>
+
+                        </select>
+
+                        <p class="form-help">
+                            通常の平均値問題はORDINARY、思考実験など特別な問題はEXTRAにしてください。
+                        </p>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="questionTitle">
+                            タイトル
+                        </label>
+
+                        <input
+                            id="questionTitle"
+                            type="text"
+                            placeholder="例：トロッコ問題"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="questionText">
+                            問題文
+                        </label>
+
+                        <textarea
+                            id="questionText"
+                            rows="6"
+                            placeholder="問題文を入力してください"
+                            required
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     回答設定
+                ========================== -->
+                <div class="form-section">
+
+                    <div class="form-section-title">
+                        回答設定
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="answerType">
+                                回答形式
+                            </label>
+
+                            <select
+                                id="answerType"
+                                required
+                            >
+
+                                <option value="choice">
+                                    選択式
+                                </option>
+
+                                <option value="numeric">
+                                    数値入力
+                                </option>
+
+                                <option value="time">
+                                    時間入力
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="aggregationType">
+                                集計方式
+                            </label>
+
+                            <select
+                                id="aggregationType"
+                                required
+                            >
+
+                                <option value="choice_percentage">
+                                    選択肢別割合
+                                </option>
+
+                                <option value="numeric_average">
+                                    数値平均
+                                </option>
+
+                                <option value="time_average">
+                                    時間平均
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     選択肢
+                ========================== -->
+                <div
+                    id="optionsSection"
+                    class="form-section"
+                >
+
+                    <div class="options-header">
+
+                        <div>
+
+                            <div class="form-section-title">
+                                選択肢
+                            </div>
+
+                            <p class="form-help">
+                                選択式の場合に設定してください。
+                            </p>
+
+                        </div>
+
+                        <button
+                            id="addOptionButton"
+                            type="button"
+                            class="secondary-button"
+                        >
+                            ＋ 選択肢追加
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="optionEditorList"
+                        class="option-editor-list"
+                    >
+
+                        <!-- JavaScriptで生成 -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     公開設定
+                ========================== -->
+                <div class="form-section">
+
+                    <div class="publish-setting">
+
+                        <div>
+
+                            <div class="form-section-title">
+                                公開設定
+                            </div>
+
+                            <p class="form-help">
+                                公開すると一般ユーザーから閲覧・回答できるようになります。
+                            </p>
+
+                        </div>
+
+                        <label class="switch">
+
+                            <input
+                                id="questionPublished"
+                                type="checkbox"
+                            >
+
+                            <span class="switch-slider"></span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- エラー -->
+                <div
+                    id="formError"
+                    class="form-error hidden"
+                ></div>
+
+
+                <!-- モーダルフッター -->
+                <div class="modal-footer">
+
+                    <button
+                        id="cancelQuestionButton"
+                        type="button"
+                        class="secondary-button"
+                    >
+                        キャンセル
+                    </button>
+
+                    <button
+                        id="saveQuestionButton"
+                        type="submit"
+                        class="primary-button"
+                    >
+                        保存する
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         削除確認モーダル
+    ========================== -->
+    <div
+        id="deleteModal"
+        class="modal-overlay hidden"
+    >
+
+        <div class="confirm-modal">
+
+            <div class="confirm-icon">
+                !
+            </div>
+
+            <h2>
+                問題を削除しますか？
+            </h2>
+
+            <p id="deleteQuestionName">
+                この問題を削除します。
+            </p>
+
+            <p class="warning-text">
+                この操作は取り消せません。
+            </p>
+
+            <div class="confirm-actions">
+
+                <button
+                    id="cancelDeleteButton"
+                    type="button"
+                    class="secondary-button"
+                >
+                    キャンセル
+                </button>
+
+                <button
+                    id="confirmDeleteButton"
+                    type="button"
+                    class="danger-button"
+                >
+                    削除する
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         通知
+    ========================== -->
+    <div
+        id="toast"
+        class="toast hidden"
+    >
+        <span id="toastMessage"></span>
+    </div>
+
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>
